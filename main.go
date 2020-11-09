@@ -24,6 +24,12 @@ func main() {
         paths = append(paths, file.Name())
       }
       fmt.Println(paths)
+      for _, v := range paths {
+        if args[0] == v {
+          fmt.Println(args[0] + " is already exists.")
+          return
+        }
+      }
     },
   }
 
