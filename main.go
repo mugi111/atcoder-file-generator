@@ -1,4 +1,4 @@
-package atcoderfilegenerator
+package main
 
 import (
   "os"
