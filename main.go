@@ -36,7 +36,36 @@ func main() {
     },
   }
 
+  var cmdGenWithTemplate = &cobra.Command{
+    Use:   "gent [Contest Name] [TemplatePath]",
+    Short: "Generate Files",
+    Long: `Generate folders and files with the template.`,
+    Args: cobra.MinimumNArgs(2),
+    Run: func(cmd *cobra.Command, args []string) {
+      _, err := os.Stat(args[0])
+      if err == nil {
+          fmt.Println(args[0] + " is already exists.")
+          return
+      }
+
+      err = os.Mkdir(args[0], 0777);
+      if err != nil {
+        panic(err)
+      }
+
+      ext := filepath.Ext(args[1])
+
+      for _, v := range probList {
+        genFile, err := os.Create(filepath.Join("./", args[0], v + ext))
+        if err != nil {
+          panic(err)
+        }
+        genFile.Close()
+      }
+    },
+  }
+
   var rootCmd = &cobra.Command{Use: "acgen"}
-  rootCmd.AddCommand(cmdGenWithName)
+  rootCmd.AddCommand(cmdGenWithName, cmdGenWithTemplate)
   rootCmd.Execute()
 }
