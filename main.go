@@ -2,6 +2,7 @@ package main
 
 import (
   "os"
+  "io"
   "fmt"
   "path/filepath"
   "github.com/spf13/cobra"
@@ -55,13 +56,23 @@ func main() {
 
       ext := filepath.Ext(args[1])
 
+      in, err := os.Open(args[1])
+      if err != nil {
+        panic(err)
+      }
+
       for _, v := range probList {
         genFile, err := os.Create(filepath.Join("./", args[0], v + ext))
         if err != nil {
           panic(err)
         }
+        _, err = io.Copy(genFile, in)
+         if err != nil {
+          panic(err)
+        }
         genFile.Close()
       }
+      in.Close()
     },
   }
 
